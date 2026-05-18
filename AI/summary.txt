@@ -32,3 +32,10 @@ The user asked to continue with the next implementation step after parsing.
 
 Response summary:
 The tetromino validation layer was implemented. `ValidateTetromino()` now enforces the core shape rules by rejecting tetrominoes that do not contain exactly four cells or are not orthogonally connected. `NormalizeTetromino()` was also implemented to shift tetromino shapes to the top-left origin and sort their coordinates deterministically. New unit tests were added for valid tetrominoes, invalid block counts, disconnected shapes, and normalization behavior. The code was formatted with `gofmt`, and verification passed with `go test ./...` and `go vet ./...` using `GOCACHE=/tmp/go-build-cache`.
+
+2026-05-18
+Prompt summary:
+The user asked to continue after the validation layer was completed.
+
+Response summary:
+The parser and validator were integrated so that `ParseFile()` now returns only validated and normalized tetrominoes. Additional parser tests were added to verify normalization behavior and to ensure invalid tetromino shapes are rejected when parsing, including wrong block counts and disconnected shapes. The code was formatted with `gofmt`, and verification passed with `go test ./...`, `go vet ./...`, and `go build ./...` using `GOCACHE=/tmp/go-build-cache`.

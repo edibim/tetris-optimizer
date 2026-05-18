@@ -38,6 +38,12 @@ func ParseFile(data []byte) ([]Tetromino, error) {
 			return nil, err
 		}
 
+		if err := ValidateTetromino(block); err != nil {
+			return nil, err
+		}
+
+		block = NormalizeTetromino(block)
+
 		tetrominoes = append(tetrominoes, block)
 		index = nextIndex
 

@@ -30,7 +30,7 @@ func TestReadFileMissingFile(t *testing.T) {
 }
 
 func TestParseFileSingleTetromino(t *testing.T) {
-	data := []byte("##..\n##..\n....\n....\n")
+	data := []byte("....\n..##\n..##\n....\n")
 
 	tetrominoes, err := internal.ParseFile(data)
 	if err != nil {
@@ -48,6 +48,19 @@ func TestParseFileSingleTetromino(t *testing.T) {
 
 	if len(got.Cells) != 4 {
 		t.Fatalf("tetromino has %d cells, want 4", len(got.Cells))
+	}
+
+	wantCells := []internal.Point{
+		{Row: 0, Col: 0},
+		{Row: 0, Col: 1},
+		{Row: 1, Col: 0},
+		{Row: 1, Col: 1},
+	}
+
+	for index := range wantCells {
+		if got.Cells[index] != wantCells[index] {
+			t.Fatalf("cell %d = %+v, want %+v", index, got.Cells[index], wantCells[index])
+		}
 	}
 }
 
@@ -105,5 +118,23 @@ func TestParseFileRejectsInvalidCharacter(t *testing.T) {
 	_, err := internal.ParseFile(data)
 	if err == nil {
 		t.Fatal("ParseFile returned nil error for invalid character")
+	}
+}
+
+func TestParseFileRejectsWrongBlockCount(t *testing.T) {
+	data := []byte("#...\n#...\n....\n....\n")
+
+	_, err := internal.ParseFile(data)
+	if err == nil {
+		t.Fatal("ParseFile returned nil error for wrong block count")
+	}
+}
+
+func TestParseFileRejectsDisconnectedTetromino(t *testing.T) {
+	data := []byte("#...\n.#..\n..#.\n...#\n")
+
+	_, err := internal.ParseFile(data)
+	if err == nil {
+		t.Fatal("ParseFile returned nil error for disconnected tetromino")
 	}
 }
