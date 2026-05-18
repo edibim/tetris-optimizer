@@ -18,3 +18,17 @@ The user asked me to create the project structure and move into Milestone 1 impl
 
 Response summary:
 Milestone 1 project scaffolding was created. The repository now includes a Go module, a minimal `main.go` entrypoint, an `internal/` package layout (`errors.go`, `parser.go`, `validator.go`, `solver.go`, `board.go`, `tetromino.go`), and initial test folders under `tests/unit` and `tests/testdata`. The first unit tests were added for file reading, along with sample test fixtures. The codebase was formatted with `gofmt`, and verification was completed successfully with `go test ./...`, `go vet ./...`, and `go build ./...` using a writable Go cache path in `/tmp` because the default sandbox cache location was read-only.
+
+2026-05-18
+Prompt summary:
+The user asked to proceed with the next implementation step.
+
+Response summary:
+The first parsing step of Milestone 2 was implemented. `ParseFile()` now performs strict file-format parsing: it rejects empty input, invalid separators, incomplete tetromino blocks, wrong line widths, and invalid characters. It also converts each 4x4 block into tetromino coordinates and assigns letters in input order. New unit tests were added to cover valid single and multiple tetromino inputs as well as key invalid format cases. The code was formatted with `gofmt`, and verification passed with `go test ./...` and `go vet ./...` using `GOCACHE=/tmp/go-build-cache`.
+
+2026-05-18
+Prompt summary:
+The user asked to continue with the next implementation step after parsing.
+
+Response summary:
+The tetromino validation layer was implemented. `ValidateTetromino()` now enforces the core shape rules by rejecting tetrominoes that do not contain exactly four cells or are not orthogonally connected. `NormalizeTetromino()` was also implemented to shift tetromino shapes to the top-left origin and sort their coordinates deterministically. New unit tests were added for valid tetrominoes, invalid block counts, disconnected shapes, and normalization behavior. The code was formatted with `gofmt`, and verification passed with `go test ./...` and `go vet ./...` using `GOCACHE=/tmp/go-build-cache`.
