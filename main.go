@@ -2,26 +2,39 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"tetris-optimizer/internal"
 )
 
 func main() {
-	if err := run(os.Args[1:]); err != nil {
+	if err := run(os.Args[1:], os.Stdout); err != nil {
 		fmt.Println("ERROR")
 	}
 }
 
-func run(args []string) error {
+// run coordinates CLI input, parsing, solving, and final rendering.
+func run(args []string, stdout io.Writer) error {
 	if len(args) != 1 {
-		return internal.ErrInvalidInput
+		return internal.ErrInvalidArgCount
 	}
 
-	_, err := internal.ReadFile(args[0])
+	data, err := internal.ReadFile(args[0])
 	if err != nil {
 		return err
 	}
 
-	return internal.ErrNotImplemented
+	tetrominoes, err := internal.ParseFile(data)
+	if err != nil {
+		return err
+	}
+
+	board, err := internal.SolveBoard(tetrominoes)
+	if err != nil {
+		return err
+	}
+
+	_, err = fmt.Fprintln(stdout, board.String())
+	return err
 }

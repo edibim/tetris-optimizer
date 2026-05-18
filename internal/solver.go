@@ -1,7 +1,57 @@
 package internal
 
+// SolveBoard finds the smallest square board that fits all tetrominoes.
 func SolveBoard(tetrominoes []Tetromino) (*Board, error) {
-	_ = tetrominoes
+	if len(tetrominoes) == 0 {
+		return nil, ErrInvalidInput
+	}
 
-	return nil, ErrNotImplemented
+	size := minBoardSize(len(tetrominoes))
+	for {
+		board := NewBoard(size)
+		if solveFromIndex(board, tetrominoes, 0) {
+			return board, nil
+		}
+
+		size++
+	}
+}
+
+func solveFromIndex(board *Board, tetrominoes []Tetromino, index int) bool {
+	if index == len(tetrominoes) {
+		return true
+	}
+
+	current := tetrominoes[index]
+	maxRow := board.Size - current.Height()
+	maxCol := board.Size - current.Width()
+
+	for row := 0; row <= maxRow; row++ {
+		for col := 0; col <= maxCol; col++ {
+			if !board.CanPlace(current, row, col) {
+				continue
+			}
+
+			if err := board.PlaceTetromino(current, row, col); err != nil {
+				continue
+			}
+
+			if solveFromIndex(board, tetrominoes, index+1) {
+				return true
+			}
+
+			board.RemoveTetromino(current, row, col)
+		}
+	}
+
+	return false
+}
+
+func minBoardSize(pieceCount int) int {
+	size := 2
+	for size*size < pieceCount*4 {
+		size++
+	}
+
+	return size
 }

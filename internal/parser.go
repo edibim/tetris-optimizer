@@ -1,23 +1,26 @@
 package internal
 
 import (
+	"fmt"
 	"os"
 	"strings"
 )
 
+// ReadFile loads the raw bytes from the CLI-provided input path.
 func ReadFile(filePath string) ([]byte, error) {
 	data, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, ErrInvalidInput
+		return nil, fmt.Errorf("%w: %w", ErrReadFile, err)
 	}
 
 	return data, nil
 }
 
+// ParseFile validates the text format and returns normalized tetrominoes.
 func ParseFile(data []byte) ([]Tetromino, error) {
 	content := normalizeNewlines(string(data))
 	if content == "" {
-		return nil, ErrInvalidInput
+		return nil, ErrEmptyInput
 	}
 
 	lines := strings.Split(content, "\n")
@@ -30,7 +33,7 @@ func ParseFile(data []byte) ([]Tetromino, error) {
 
 	for index < len(lines) {
 		if lines[index] == "" {
-			return nil, ErrInvalidInput
+			return nil, ErrUnexpectedBlankLine
 		}
 
 		block, nextIndex, err := parseTetrominoBlock(lines, index, len(tetrominoes))
@@ -52,17 +55,17 @@ func ParseFile(data []byte) ([]Tetromino, error) {
 		}
 
 		if lines[index] != "" {
-			return nil, ErrInvalidInput
+			return nil, ErrUnexpectedBlankLine
 		}
 
 		index++
 		if index == len(lines) {
-			return nil, ErrInvalidInput
+			return nil, ErrTrailingSeparator
 		}
 	}
 
 	if len(tetrominoes) == 0 {
-		return nil, ErrInvalidInput
+		return nil, ErrEmptyInput
 	}
 
 	return tetrominoes, nil
@@ -74,19 +77,19 @@ func normalizeNewlines(content string) string {
 
 func parseTetrominoBlock(lines []string, startIndex int, tetrominoIndex int) (Tetromino, int, error) {
 	if startIndex+4 > len(lines) {
-		return Tetromino{}, 0, ErrInvalidInput
+		return Tetromino{}, 0, ErrIncompleteBlock
 	}
 
 	cells := make([]Point, 0, 4)
 	for rowOffset := 0; rowOffset < 4; rowOffset++ {
 		line := lines[startIndex+rowOffset]
 		if len(line) != 4 {
-			return Tetromino{}, 0, ErrInvalidInput
+			return Tetromino{}, 0, ErrInvalidRowWidth
 		}
 
 		for col, char := range line {
 			if char != '#' && char != '.' {
-				return Tetromino{}, 0, ErrInvalidInput
+				return Tetromino{}, 0, ErrInvalidCharacter
 			}
 
 			if char == '#' {

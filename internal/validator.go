@@ -2,18 +2,20 @@ package internal
 
 import "sort"
 
+// ValidateTetromino checks the core shape rules required by the project.
 func ValidateTetromino(tetromino Tetromino) error {
 	if len(tetromino.Cells) != 4 {
-		return ErrInvalidInput
+		return ErrInvalidBlockCount
 	}
 
 	if !isConnected(tetromino.Cells) {
-		return ErrInvalidInput
+		return ErrDisconnectedShape
 	}
 
 	return nil
 }
 
+// NormalizeTetromino shifts the shape to the top-left origin and sorts it.
 func NormalizeTetromino(tetromino Tetromino) Tetromino {
 	if len(tetromino.Cells) == 0 {
 		return tetromino
