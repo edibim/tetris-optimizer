@@ -1,0 +1,13 @@
+2026-05-18
+Prompt summary:
+The user asked me to inspect the current repository, read and follow `AI/AGENTS.md` exactly, and act as a senior coding mentor so the project can progress step by step with the user writing most of the code with guidance. The user also asked that every prompt, together with a short summary of the answer, be recorded in `AI/summary.txt`.
+
+Response summary:
+An initial repository review was completed. There is no Go implementation yet, only guidance and project information files. The key rules from `AI/AGENTS.md` are: Go standard library only, small focused functions, clear separation of parsing/validation/solving/rendering, a backtracking solver, TDD whenever practical, and running `gofmt -w .`, `go vet ./...`, and `go test ./...` before commits. Our collaboration model from this point forward is mentor-style: we will choose the correct next step deliberately, avoid opaque copy-paste solutions, and keep the focus on understanding so the user can build similar projects independently by the end.
+
+2026-05-18
+Prompt summary:
+The user clarified that everything written inside the repository must be in English, while the chat conversation should remain in Greek. The user asked me to fix `AI/summary.txt` accordingly and to create a proper senior-level PRD based on the full project information and our agreed mentorship approach.
+
+Response summary:
+`AI/summary.txt` was converted to English, and a structured PRD was prepared to guide the project. The PRD captures the product goal, scope, functional requirements, error handling expectations, technical constraints, recommended architecture, testing strategy, delivery milestones, acceptance criteria, and mentoring workflow so the implementation can proceed step by step with strong engineering discipline and clear learning outcomes.
