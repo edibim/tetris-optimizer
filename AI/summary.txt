@@ -11,3 +11,10 @@ The user clarified that everything written inside the repository must be in Engl
 
 Response summary:
 `AI/summary.txt` was converted to English, and a structured PRD was prepared to guide the project. The PRD captures the product goal, scope, functional requirements, error handling expectations, technical constraints, recommended architecture, testing strategy, delivery milestones, acceptance criteria, and mentoring workflow so the implementation can proceed step by step with strong engineering discipline and clear learning outcomes.
+
+2026-05-18
+Prompt summary:
+The user asked me to create the project structure and move into Milestone 1 implementation.
+
+Response summary:
+Milestone 1 project scaffolding was created. The repository now includes a Go module, a minimal `main.go` entrypoint, an `internal/` package layout (`errors.go`, `parser.go`, `validator.go`, `solver.go`, `board.go`, `tetromino.go`), and initial test folders under `tests/unit` and `tests/testdata`. The first unit tests were added for file reading, along with sample test fixtures. The codebase was formatted with `gofmt`, and verification was completed successfully with `go test ./...`, `go vet ./...`, and `go build ./...` using a writable Go cache path in `/tmp` because the default sandbox cache location was read-only.
