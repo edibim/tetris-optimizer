@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"path/filepath"
 	"testing"
+
+	"tetris-optimizer/internal"
 )
 
 func TestRunValidFile(t *testing.T) {
@@ -36,6 +38,29 @@ func TestRunRejectsInvalidFile(t *testing.T) {
 	err := run([]string{filePath}, &output)
 	if err == nil {
 		t.Fatal("run returned nil error for invalid tetromino file")
+	}
+}
+
+func TestFormatCLIErrorInvalidArgCount(t *testing.T) {
+	got := internal.FormatCLIError(internal.ErrInvalidArgCount)
+
+	if got == "" {
+		t.Fatal("formatCLIError returned an empty message")
+	}
+	if got[:6] != "ERROR:" {
+		t.Fatalf("expected message to start with ERROR:, got %q", got)
+	}
+}
+
+func TestFormatCLIErrorIncludesDetailsForInvalidCharacter(t *testing.T) {
+	err := internal.ErrInvalidCharacter
+	got := internal.FormatCLIError(err)
+
+	if got == "" {
+		t.Fatal("formatCLIError returned an empty message")
+	}
+	if got[:6] != "ERROR:" {
+		t.Fatalf("expected message to start with ERROR:, got %q", got)
 	}
 }
 

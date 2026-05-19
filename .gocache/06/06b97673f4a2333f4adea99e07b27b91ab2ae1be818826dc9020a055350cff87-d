@@ -1,0 +1,4 @@
+# test log
+open tests\testdata\valid_single_o.txt
+open tests\testdata\invalid_disconnected.txt
+open tests\testdata\sample_subject.txt

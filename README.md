@@ -2,7 +2,7 @@
 
 This project is a Go command-line program that reads tetrominoes from a text file, validates the input strictly, and assembles all pieces into the smallest possible square using recursive backtracking.
 
-The final program follows the project rule that invalid input must print exactly `ERROR`.
+The current CLI is developer-friendly: it prints `ERROR:` followed by a short explanation so invalid files are easier to debug while you build and review the project.
 
 ## Features
 
@@ -21,10 +21,11 @@ go run . sample.txt
 
 If the input is valid, the program prints the solved board.
 
-If the input is invalid, the program prints:
+If the input is invalid, the program prints a descriptive error, for example:
 
 ```text
-ERROR
+ERROR: invalid character in tetromino file.
+Details: tetromino A line 1 col 1 contains "`"
 ```
 
 ## Example
@@ -99,9 +100,9 @@ A...
 
 ## Internal Error Design
 
-The CLI always prints `ERROR`, because that is the project requirement.
+The CLI now surfaces short, human-readable error messages so bad inputs are easier to inspect.
 
-Internally, the code uses more detailed errors so the implementation stays easier to debug and review:
+Internally, the code still uses more detailed sentinel errors so the implementation stays easier to debug and review:
 
 - `ErrInvalidArgCount`
 - `ErrReadFile`
@@ -116,7 +117,7 @@ Internally, the code uses more detailed errors so the implementation stays easie
 - `ErrBoardTooSmall`
 - `ErrCellOccupied`
 
-This keeps the public behavior simple while making the internal logic more maintainable.
+This keeps the internal logic maintainable while making CLI failures easier to understand.
 
 ## Testing
 
@@ -151,7 +152,7 @@ If you need to explain the project in an audit, focus on these points:
 2. The validator is responsible for shape correctness and normalization.
 3. The board layer is responsible for safe placement rules and final rendering.
 4. The solver uses recursive backtracking and grows the square only when necessary.
-5. The final CLI hides internal errors and prints only `ERROR`, matching the specification exactly.
+5. The final CLI maps internal errors into clearer user-facing messages, which helps debug invalid tetromino files faster.
 
 ## Useful Test Files
 

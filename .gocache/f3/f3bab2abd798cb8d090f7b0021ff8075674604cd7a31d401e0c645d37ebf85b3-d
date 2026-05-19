@@ -1,0 +1,6 @@
+./board.go
+./errors.go
+./parser.go
+./solver.go
+./tetromino.go
+./validator.go

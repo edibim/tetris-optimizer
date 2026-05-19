@@ -1,0 +1,4 @@
+./board_test.go
+./parser_test.go
+./solver_test.go
+./validator_test.go

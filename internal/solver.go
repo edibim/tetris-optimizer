@@ -28,10 +28,6 @@ func solveFromIndex(board *Board, tetrominoes []Tetromino, index int) bool {
 
 	for row := 0; row <= maxRow; row++ {
 		for col := 0; col <= maxCol; col++ {
-			if !board.CanPlace(current, row, col) {
-				continue
-			}
-
 			if err := board.PlaceTetromino(current, row, col); err != nil {
 				continue
 			}

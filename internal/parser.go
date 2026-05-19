@@ -33,7 +33,7 @@ func ParseFile(data []byte) ([]Tetromino, error) {
 
 	for index < len(lines) {
 		if lines[index] == "" {
-			return nil, ErrUnexpectedBlankLine
+			return nil, fmt.Errorf("%w: line %d", ErrUnexpectedBlankLine, index+1)
 		}
 
 		block, nextIndex, err := parseTetrominoBlock(lines, index, len(tetrominoes))
@@ -55,12 +55,12 @@ func ParseFile(data []byte) ([]Tetromino, error) {
 		}
 
 		if lines[index] != "" {
-			return nil, ErrUnexpectedBlankLine
+			return nil, fmt.Errorf("%w: line %d", ErrUnexpectedBlankLine, index+1)
 		}
 
 		index++
 		if index == len(lines) {
-			return nil, ErrTrailingSeparator
+			return nil, fmt.Errorf("%w: after tetromino %c", ErrTrailingSeparator, rune('A'+len(tetrominoes)-1))
 		}
 	}
 
@@ -76,20 +76,21 @@ func normalizeNewlines(content string) string {
 }
 
 func parseTetrominoBlock(lines []string, startIndex int, tetrominoIndex int) (Tetromino, int, error) {
+	letter := rune('A' + tetrominoIndex)
 	if startIndex+4 > len(lines) {
-		return Tetromino{}, 0, ErrIncompleteBlock
+		return Tetromino{}, 0, fmt.Errorf("%w: tetromino %c starts at line %d", ErrIncompleteBlock, letter, startIndex+1)
 	}
 
 	cells := make([]Point, 0, 4)
 	for rowOffset := 0; rowOffset < 4; rowOffset++ {
 		line := lines[startIndex+rowOffset]
 		if len(line) != 4 {
-			return Tetromino{}, 0, ErrInvalidRowWidth
+			return Tetromino{}, 0, fmt.Errorf("%w: tetromino %c line %d has width %d", ErrInvalidRowWidth, letter, startIndex+rowOffset+1, len(line))
 		}
 
 		for col, char := range line {
 			if char != '#' && char != '.' {
-				return Tetromino{}, 0, ErrInvalidCharacter
+				return Tetromino{}, 0, fmt.Errorf("%w: tetromino %c line %d col %d contains %q", ErrInvalidCharacter, letter, startIndex+rowOffset+1, col+1, string(char))
 			}
 
 			if char == '#' {
@@ -103,7 +104,7 @@ func parseTetrominoBlock(lines []string, startIndex int, tetrominoIndex int) (Te
 
 	tetromino := Tetromino{
 		Cells:  cells,
-		Letter: rune('A' + tetrominoIndex),
+		Letter: letter,
 	}
 
 	return tetromino, startIndex + 4, nil
