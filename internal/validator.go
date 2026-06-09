@@ -1,7 +1,5 @@
 package internal
 
-import "sort"
-
 // ValidateTetromino checks the core shape rules required by the project.
 func ValidateTetromino(tetromino Tetromino) error {
 	if len(tetromino.Cells) != 4 {
@@ -44,18 +42,22 @@ func NormalizeTetromino(tetromino Tetromino) Tetromino {
 			Col: cell.Col - minCol,
 		}
 	}
+	for i := 0; i < len(normalized.Cells); i++ {
+		for j := i + 1; j < len(normalized.Cells); j++ {
+			current := normalized.Cells[i]
+			next := normalized.Cells[j]
 
-	sort.Slice(normalized.Cells, func(i int, j int) bool {
-		if normalized.Cells[i].Row != normalized.Cells[j].Row {
-			return normalized.Cells[i].Row < normalized.Cells[j].Row
+			if next.Row < current.Row || next.Row == current.Row && next.Col < current.Col {
+				normalized.Cells[i], normalized.Cells[j] = normalized.Cells[j], normalized.Cells[i]
+			}
 		}
-
-		return normalized.Cells[i].Col < normalized.Cells[j].Col
-	})
+	}
 
 	return normalized
 }
 
+// isConnected checks that all blocks touch through up, down, left, or right.
+// A tetromino with diagonal-only contact is invalid.
 func isConnected(cells []Point) bool {
 	visited := map[Point]bool{
 		cells[0]: true,
@@ -83,6 +85,8 @@ func isConnected(cells []Point) bool {
 	return len(visited) == len(cells)
 }
 
+// orthogonalNeighbors returns the four cells around one point.
+// Validation uses this to walk through connected blocks.
 func orthogonalNeighbors(point Point) []Point {
 	return []Point{
 		{Row: point.Row - 1, Col: point.Col},

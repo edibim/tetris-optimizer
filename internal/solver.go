@@ -17,6 +17,8 @@ func SolveBoard(tetrominoes []Tetromino) (*Board, error) {
 	}
 }
 
+// solveFromIndex tries to place tetrominoes one by one.
+// This is the visible recursive backtracking step of the solver.
 func solveFromIndex(board *Board, tetrominoes []Tetromino, index int) bool {
 	if index == len(tetrominoes) {
 		return true
@@ -43,6 +45,8 @@ func solveFromIndex(board *Board, tetrominoes []Tetromino, index int) bool {
 	return false
 }
 
+// minBoardSize finds the smallest square that can hold all blocks by area.
+// The solver starts here and grows the board only when needed.
 func minBoardSize(pieceCount int) int {
 	size := 2
 	for size*size < pieceCount*4 {

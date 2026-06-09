@@ -71,10 +71,14 @@ func ParseFile(data []byte) ([]Tetromino, error) {
 	return tetrominoes, nil
 }
 
+// normalizeNewlines makes Windows and Unix files behave the same.
+// The parser can then split only on '\n'.
 func normalizeNewlines(content string) string {
 	return strings.ReplaceAll(content, "\r\n", "\n")
 }
 
+// parseTetrominoBlock reads one 4x4 tetromino from the file lines.
+// It extracts '#' cells and assigns the correct output letter.
 func parseTetrominoBlock(lines []string, startIndex int, tetrominoIndex int) (Tetromino, int, error) {
 	letter := rune('A' + tetrominoIndex)
 	if startIndex+4 > len(lines) {

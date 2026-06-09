@@ -87,6 +87,8 @@ func (b *Board) String() string {
 	return builder.String()
 }
 
+// isInside checks whether a row and column are inside the board.
+// Placement uses this to reject pieces that would leave the square.
 func (b *Board) isInside(row int, col int) bool {
 	return row >= 0 && row < b.Size && col >= 0 && col < b.Size
 }

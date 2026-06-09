@@ -8,6 +8,8 @@ import (
 	"tetris-optimizer/internal"
 )
 
+// main runs the CLI program and prints any user-facing error.
+// Keeping error printing here keeps the rest of the code testable.
 func main() {
 	if err := run(os.Args[1:], os.Stdout); err != nil {
 		fmt.Fprintln(os.Stderr, internal.FormatCLIError(err))
