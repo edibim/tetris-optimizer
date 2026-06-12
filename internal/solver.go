@@ -1,10 +1,17 @@
 package internal
 
+import "sort"
+
 // SolveBoard finds the smallest square board that fits all tetrominoes.
 func SolveBoard(tetrominoes []Tetromino) (*Board, error) {
 	if len(tetrominoes) == 0 {
 		return nil, ErrInvalidInput
 	}
+
+	sort.Slice(tetrominoes, func(i, j int) bool {
+		return tetrominoes[i].Width()+tetrominoes[i].Height() >
+			tetrominoes[j].Width()+tetrominoes[j].Height()
+	})
 
 	size := minBoardSize(len(tetrominoes))
 	for {
